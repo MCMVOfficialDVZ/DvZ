@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="DVZ:jar">
+    <output-path>$PROJECT_DIR$/../../Servers/development/plugins</output-path>
+    <root id="archive" name="DVZ.jar">
+      <element id="module-output" name="DVZ" />
+      <element id="dir-copy" path="$PROJECT_DIR$/src/main/resources" />
+    </root>
+  </artifact>
+</component>

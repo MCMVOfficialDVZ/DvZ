@@ -1,0 +1,11 @@
+name: DVZ
+version: '1'
+main: com.lynxdeer.dvz.DVZ
+api-version: 1.18
+authors: [ Lynxdeer ]
+description: DVZ plugin for an event lol
+commands:
+  cgive:
+    description: gives item
+    permission: op
+    permission-message: §cno
