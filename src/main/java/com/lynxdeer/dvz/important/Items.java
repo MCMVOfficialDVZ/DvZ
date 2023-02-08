@@ -38,6 +38,30 @@ public class Items implements CommandExecutor {
 				im.setCustomModelData(1);
 				i.setItemMeta(im);
 			}
+			case "STRENGTH_ORB" -> {
+				i = new ItemStack(Material.SCUTE);
+				ItemMeta im = i.getItemMeta();
+				im.setDisplayName("§cStrength Orb");
+				im.setLore(List.of("§7Right click to throw strengh on people!"));
+				im.setCustomModelData(1);
+				i.setItemMeta(im);
+			}
+			case "SHIELD_ORB" -> {
+				i = new ItemStack(Material.SCUTE);
+				ItemMeta im = i.getItemMeta();
+				im.setDisplayName("§9Shield Orb");
+				im.setLore(List.of("§7Right click to create a portable shield!"));
+				im.setCustomModelData(2);
+				i.setItemMeta(im);
+			}
+			case "ABSORPTION_ORB" -> {
+				i = new ItemStack(Material.SCUTE);
+				ItemMeta im = i.getItemMeta();
+				im.setDisplayName("§eAbsorption Orb");
+				im.setLore(List.of("§7Right click to throw absorption on people!"));
+				im.setCustomModelData(3);
+				i.setItemMeta(im);
+			}
 		}
 
 		ItemMeta m = i.getItemMeta();

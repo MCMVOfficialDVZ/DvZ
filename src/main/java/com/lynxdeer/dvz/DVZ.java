@@ -5,10 +5,13 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -27,11 +30,25 @@ public final class DVZ extends JavaPlugin implements org.bukkit.event.Listener {
 		this.getServer().getPluginManager().registerEvents(this, this);
 
 		this.getServer().getPluginManager().registerEvents(new com.lynxdeer.dvz.weapons.Wand(), this);
+		this.getServer().getPluginManager().registerEvents(new com.lynxdeer.dvz.stuff.Chat(), this);
+		this.getServer().getPluginManager().registerEvents(new com.lynxdeer.dvz.weapons.Orbs(), this);
 
 
 		Objects.requireNonNull(this.getCommand("cgive")).setExecutor(new com.lynxdeer.dvz.important.Items());
 	}
 
+	public static String nulltoempty(String s) {
+		if (s == null) return "";
+		return s;
+	}
+
+
+	@EventHandler
+	public void onStuffUse(PlayerInteractEvent event) {
+		if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+			if (event.getClickedBlock().getType().toString().contains("SIGN")) event.setCancelled(true);
+		}
+	}
 
 
 	public static DVZ getPlugin() {return plugin;}
@@ -81,6 +98,18 @@ public final class DVZ extends JavaPlugin implements org.bukkit.event.Listener {
 		return ret;
 	}
 
+	public static ArrayList<LivingEntity> closemobs(Player p, Location loc, double radius) {
+		ArrayList<LivingEntity> ret = new ArrayList<>();
+		for (LivingEntity loopentity : loc.getWorld().getLivingEntities()) {if ((loopentity.getLocation().add(0, 1, 0).distance(loc) < radius) && entityisproper(loopentity) && loopentity!=p) ret.add(loopentity);}
+		return ret;
+	}
+
+	public static ArrayList<LivingEntity> closeairmobs(Player p, Location loc, double radius) {
+		ArrayList<LivingEntity> ret = new ArrayList<>();
+		for (LivingEntity loopentity : loc.getWorld().getLivingEntities()) {if ((loopentity.getLocation().add(0, 1, 0).distance(loc) < radius) && entityisproper(loopentity) && loopentity!=p && !loopentity.isOnGround()) ret.add(loopentity);}
+		return ret;
+	}
+
 	public static ArrayList<LivingEntity> hitbox(Location loc) {
 		ArrayList<LivingEntity> ret = new ArrayList<>();
 		for (LivingEntity loopentity : loc.getWorld().getLivingEntities()) {if ((loopentity.getBoundingBox().contains(loc.getX(), loc.getY(), loc.getZ())) && entityisproper(loopentity)) ret.add(loopentity);}
@@ -126,16 +155,17 @@ public final class DVZ extends JavaPlugin implements org.bukkit.event.Listener {
 		return mins + ":" + stringsec;
 	}
 
+	@EventHandler
+	public void onDamage(EntityDamageEvent event) {
+		LivingEntity le = (LivingEntity)event.getEntity();
+		le.setNoDamageTicks(0);
+	}
 
 
-	public static void debug(String s) {
 
-		for (Player p : Bukkit.getOnlinePlayers()) {
-			if (p.getName().equals("Lynxdeer")) p.sendMessage("[Debug] " + ChatColor.translateAlternateColorCodes('&', s));
-		}
-
-		Bukkit.getLogger().log(Level.INFO, "[Debug]" + s);
-
+	public static void debug(Object s) {
+		for (Player p : Bukkit.getOnlinePlayers()) if (p.getName().equalsIgnoreCase("Lynxdeer") && p.getMetadata("debug").get(0).asBoolean()) p.sendMessage("[Debug] " + s);
+		Bukkit.getLogger().log(Level.INFO, "[Debug] " + s);
 	}
 
 
